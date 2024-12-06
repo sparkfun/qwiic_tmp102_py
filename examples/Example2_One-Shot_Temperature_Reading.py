@@ -19,7 +19,6 @@
 # Distributed as-is; no warranty is given.   
 #-----------------------------------------------------------------------------
 
-from __future__ import print_function
 import qwiic_tmp102
 import time
 import sys

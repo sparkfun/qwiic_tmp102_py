@@ -10,8 +10,6 @@ This package can be used in conjunction with the overall [SparkFun qwiic Python 
 New to qwiic? Take a look at the entire [SparkFun qwiic ecosystem](https://www.sparkfun.com/qwiic).
 
 """
-from __future__ import print_function, division
-
 import qwiic_i2c
 
 #======================================================================
@@ -119,10 +117,10 @@ class QwiicTmp102Sensor(object):
         Reads the results from the sensor
         :rtype: integer
         """
-        data = self._i2c.readBlock(self.address, TEMPERATURE_REGISTER, 2)
+        data = self.read_block_pointer_reg(TEMPERATURE_REGISTER)
         
         if (data[0] == 0xFF and data[1] == 0xFF):
-                return NaN
+                return None
                 
         if(data[1]&0x01):	# 13 bit mode
                 baseRead = ((data[0]) << 5) | (data[1] >> 3)
@@ -151,14 +149,14 @@ class QwiicTmp102Sensor(object):
         
     def set_conversion_rate(self, rate):
         """
-        // Set the conversion rate (0-3)
-        // 0 - 0.25 Hz
-        // 1 - 1 Hz
-	// 2 - 4 Hz (default)
-        // 3 - 8 Hz
+        Set the conversion rate (0-3)
+        0 - 0.25 Hz
+        1 - 1 Hz
+	    2 - 4 Hz (default)
+        3 - 8 Hz
         """
         
-        configByte = self._i2c.readBlock(self.address, CONFIG_REGISTER, 2)
+        configByte = self.read_block_pointer_reg(CONFIG_REGISTER)
         rate = rate&0x03
                 
         # Load new conversion rate
@@ -170,10 +168,10 @@ class QwiicTmp102Sensor(object):
     def set_extended_mode(self, mode):
         """
         Enable or disable extended mode
-	0 - disabled (-55C to +128C)
-	1 - enabled  (-55C to +150C)
+        0 - disabled (-55C to +128C)
+        1 - enabled  (-55C to +150C)
         """
-        configByte = self._i2c.readBlock(self.address, CONFIG_REGISTER, 2)
+        configByte = self.read_block_pointer_reg(CONFIG_REGISTER)
         
         # Load new value for extention mode
         configByte[1] &= 0xEF		# Clear EM (bit 4 of second byte)
@@ -185,7 +183,7 @@ class QwiicTmp102Sensor(object):
         """
         Switch sensor to low power mode
         """
-        sleepValue = self._i2c.readByte(self.address, CONFIG_REGISTER)
+        sleepValue = self.read_block_pointer_reg(CONFIG_REGISTER)[0]
         sleepValue |= 0x01	# Set SD (bit 0 of first byte)
         self._i2c.writeByte(self.address, CONFIG_REGISTER, sleepValue)
 
@@ -193,7 +191,7 @@ class QwiicTmp102Sensor(object):
         """
         Wakeup and start running in normal power mode
         """
-        wakeValue = self._i2c.readByte(self.address, CONFIG_REGISTER)
+        wakeValue = self.read_block_pointer_reg(CONFIG_REGISTER)[0]
         wakeValue &= 0xFE	# Clear SD (bit 0 of first byte)
         self._i2c.writeByte(self.address, CONFIG_REGISTER, wakeValue)
 
@@ -203,7 +201,7 @@ class QwiicTmp102Sensor(object):
         0 - Active LOW
         1 - Active HIGH
         """
-        configByte = self._i2c.readByte(self.address, CONFIG_REGISTER)
+        configByte = self.read_block_pointer_reg(CONFIG_REGISTER)[0]
         
         # Load new value for polarity
         configByte &= 0xFB           # Clear POL (bit 2 of registerByte)
@@ -215,7 +213,7 @@ class QwiicTmp102Sensor(object):
         """
         Returns state of Alert register
         """
-        alert = self._i2c.readByte(self.address, CONFIG_REGISTER)
+        alert = self.read_block_pointer_reg(CONFIG_REGISTER)[1]
         alert &= 0x20   #Clear everything but the alert bit (bit 5)
         return alert>>5
         
@@ -223,7 +221,7 @@ class QwiicTmp102Sensor(object):
         """
         Sets the SingleShot Register. Returns 1 after the conversion is complete
         """
-        registerByte = self._i2c.readByte(self.address, CONFIG_REGISTER)
+        registerByte = self.read_block_pointer_reg(CONFIG_REGISTER)[0]
         if(setOneShot == 1):
                 registerByte |= (1<<7)
                 self._i2c.writeByte(self.address, CONFIG_REGISTER, registerByte)
@@ -242,7 +240,7 @@ class QwiicTmp102Sensor(object):
         if(temperature < -55.0):
                 temperature = -55.0
                 
-        registerByte = self._i2c.readBlock(self.address, CONFIG_REGISTER, 2)
+        registerByte = self.read_block_pointer_reg(CONFIG_REGISTER)
         
         #Check if temperature should be 12 or 13 bits
         # 0 - temp data will be 12 bits
@@ -252,12 +250,13 @@ class QwiicTmp102Sensor(object):
         #Convert analog temperature to digital value
         temperature = temperature/0.0625
         
+        # Align data for the temperature registers (see pg. 19 of datasheet)
         if(extendedMode):	#13-bit mode
                 registerByte[0] = int(temperature)>>5
-                registerByte[1] = (int(temperature)<<3)
+                registerByte[1] = (int(temperature) & 0x1F)<<3 # lower 5 bits 
         else:
                 registerByte[0] = int(temperature)>>4
-                registerByte[1] = int(temperature)<<4
+                registerByte[1] = (int(temperature) & 0xF)<<4 # lower 4 bits
               
         self._i2c.writeBlock(self.address, T_LOW_REGISTER, registerByte)
 
@@ -270,7 +269,7 @@ class QwiicTmp102Sensor(object):
                 temperature = 150.0
         if(temperature < -55.0):
                 temperature = -55.0
-        registerByte = self._i2c.readBlock(self.address, CONFIG_REGISTER, 2)
+        registerByte = self.read_block_pointer_reg(CONFIG_REGISTER)
         
         #Check if temperature should be 12 or 13 bits
         # 0 - temp data will be 12 bits
@@ -279,13 +278,14 @@ class QwiicTmp102Sensor(object):
                                                                 
         #Convert analog temperature to digital value
         temperature = temperature/0.0625
-                
+        
+        # Align data for the temperature registers (see pg. 19 of datasheet)
         if(extendedMode):	#13-bit mode
-                registerByte[0] = int(temperature)>>5
-                registerByte[1] = (int(temperature)<<3)
+                registerByte[0] = int(temperature)>>5 
+                registerByte[1] = (int(temperature) & 0x1F)<<3 # lower 5 bits 
         else:
                 registerByte[0] = int(temperature)>>4
-                registerByte[1] = int(temperature)<<4
+                registerByte[1] = (int(temperature) & 0xF)<<4 # lower 4 bits
                 
         self._i2c.writeBlock(self.address, T_HIGH_REGISTER, registerByte)
 
@@ -309,16 +309,16 @@ class QwiicTmp102Sensor(object):
         """
         Gets T_LOW (degrees C) alert threshold
         """
-        configByte = self._i2c.readBlock(self.address, CONFIG_REGISTER, 2)
+        configByte = self.read_block_pointer_reg(CONFIG_REGISTER)
 
         # 0 - temp data will be 12 bits
         # 1 - temp data will be 13 bits
         extendedMode = (configByte[1]&0x10)>>4	
 
-        lowTempByte = self._i2c.readBlock(self.address, T_LOW_REGISTER, 2)
+        lowTempByte = self.read_block_pointer_reg(T_LOW_REGISTER)
 
         if(lowTempByte[0] == 0xFF and lowTempByte[1] == 0xFF):
-                return NAN
+                return None
 
         if (extendedMode):
                 digitalTemp = ((lowTempByte[0]) << 5) | (lowTempByte[1] >> 3)
@@ -336,16 +336,16 @@ class QwiicTmp102Sensor(object):
         """
         Gets T_HIGH (degrees C) alert threshold
         """
-        configByte = self._i2c.readBlock(self.address, CONFIG_REGISTER, 2)
+        configByte = self.read_block_pointer_reg(CONFIG_REGISTER)
 
         # 0 - temp data will be 12 bits
         # 1 - temp data will be 13 bits
         extendedMode = (configByte[1]&0x10)>>4	
 
-        highTempByte = self._i2c.readBlock(self.address, T_HIGH_REGISTER, 2)
+        highTempByte = self.read_block_pointer_reg(T_HIGH_REGISTER)
 
         if(highTempByte[0] == 0xFF and highTempByte[1] == 0xFF):
-                return NAN
+                return None
 
         if (extendedMode):
                 digitalTemp = ((highTempByte[0]) << 5) | (highTempByte[1] >> 3)
@@ -375,15 +375,15 @@ class QwiicTmp102Sensor(object):
 
     def set_fault(self, faultSetting):
         """
-	Set the number of consecutive faults
-	0 - 1 fault
-	1 - 2 faults
-	2 - 4 faults
-	3 - 6 faults
+        Set the number of consecutive faults
+        0 - 1 fault
+        1 - 2 faults
+        2 - 4 faults
+        3 - 6 faults
         """
         faultSetting = faultSetting&3   #Make sure rate is not set higher than 3.
 
-        configByte = self._i2c.readByte(self.address, CONFIG_REGISTER)
+        configByte = self.read_block_pointer_reg(CONFIG_REGISTER)[0]
                 
         #Load new conversion rate
         configByte &= 0xE7                   # Clear F0/1 (bit 3 and 4 of first byte)
@@ -393,12 +393,11 @@ class QwiicTmp102Sensor(object):
         
     def set_alert_mode(self, mode):
         """
-	// Set Alert type
-        // 0 - Comparator Mode: Active from temp > T_HIGH until temp < T_LOW
-        // 1 - Thermostat Mode: Active when temp > T_HIGH until any read operation occurs
-	
+	    Set Alert type
+        0 - Comparator Mode: Active from temp > T_HIGH until temp < T_LOW
+        1 - Thermostat Mode: Active when temp > T_HIGH until any read operation occurs
         """
-        configByte = self._i2c.readByte(self.address, CONFIG_REGISTER)
+        configByte = self.read_block_pointer_reg(CONFIG_REGISTER)[0]
         
         #Load new conversion rate
         configByte &= 0xFD            # Clear old TM bit (bit 1 of first byte)
@@ -406,4 +405,22 @@ class QwiicTmp102Sensor(object):
 
         self._i2c.writeByte(self.address, CONFIG_REGISTER, configByte)
 
- 
+    def read_block_pointer_reg(self, reg, numBytes = 2):
+        """
+        To read from the device, we first write the register we want to read then explicitly send a stop bit.
+        Then, restart the connection to read the data from the device.
+
+        See datasheet page. 13
+
+        :param reg: The register to read from.
+        :type reg: int
+        
+        :param numBytes: The number of bytes to read.
+        :type numBytes: int
+
+        :return: A list of bytes from the device.
+        :rtype: list
+        """
+        self._i2c.writeCommand(self.address, reg)
+
+        return list(self._i2c.readBlock(self.address, reg, numBytes))
