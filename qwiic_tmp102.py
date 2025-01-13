@@ -1,4 +1,4 @@
-"""
+"""!
 qwiic_tmp102
 ============
 Python module for the [SparkFun Qwiic TMP102 Sensor](https://www.sparkfun.com/products/16304)
@@ -8,7 +8,6 @@ This python package is a port of the existing [SparkFun Qwiic TMP102 Sensor Ardu
 This package can be used in conjunction with the overall [SparkFun qwiic Python Package](https://github.com/sparkfun/Qwiic_Py)
 
 New to qwiic? Take a look at the entire [SparkFun qwiic ecosystem](https://www.sparkfun.com/qwiic).
-
 """
 import qwiic_i2c
 
@@ -39,15 +38,15 @@ _AVAILABLE_I2C_ADDRESS = [0x48, 0x49, 0x4A, 0x4B]
 # NOTE: The first address in this list is considered the default I2C address for the
 # device.
 class QwiicTmp102Sensor(object):
-    """
+    """!
     QwiicTmp102Sensor
 
-        :param address: The I2C address to use for the device.
-                        If not provided, the default address is used.
-        :param i2c_driver: An existing i2c driver object. If not provided
-                        a driver object is created.
-        :return: The TMP102 Sensor device object.
-        :rtype: Object
+    @param address: The I2C address to use for the device.
+                    If not provided, the default address is used.
+    @param i2c_driver: An existing i2c driver object. If not provided
+                    a driver object is created.
+
+    @return **Object** The TMP102 Sensor device object.
     """
     device_name         = _DEFAULT_NAME
     available_addresses = _AVAILABLE_I2C_ADDRESS
@@ -75,10 +74,10 @@ class QwiicTmp102Sensor(object):
     # Is an actual board connected to our system?
 
     def is_connected(self):
-        """
-            Determine if a Soil MoistureSensor device is conntected to the system..
-            :return: True if the device is connected, otherwise False.
-            :rtype: bool
+        """!
+        Determine if a Soil MoistureSensor device is conntected to the system..
+
+        @return **bool** True if the device is connected, otherwise False.
         """        
         return qwiic_i2c.isDeviceConnected(self.address)
 
@@ -89,10 +88,10 @@ class QwiicTmp102Sensor(object):
     #
     # Initialize the system/validate the board.
     def begin(self):
-        """
-            Initialize the operation of the Soil Moisture Sensor module
-            :return: Returns true of the initialization was successful, otherwise False.
-            :rtype: bool
+        """!
+        Initialize the operation of the Soil Moisture Sensor module
+
+        @return **bool** Returns true of the initialization was successful, otherwise False.
         """
         # Set variables
         self.tempC = 0
@@ -107,15 +106,18 @@ class QwiicTmp102Sensor(object):
     #
     # ****************************************************************************#
     def get_address(self):
-        """
+        """!
         Returns the device address
+
+        @return **int** The device address.
         """
         return self.address
 
     def read_temp_c(self):
-        """
+        """!
         Reads the results from the sensor
-        :rtype: integer
+
+        @return **float** The temperature in Celsius.
         """
         data = self.read_block_pointer_reg(TEMPERATURE_REGISTER)
         
@@ -139,17 +141,20 @@ class QwiicTmp102Sensor(object):
         return self.tempC
         
     def read_temp_f(self):
-        """
+        """!
         Reads the results from the sensor
-        :rtype: integer
+        
+        @return **float** The temperature in Fahrenheit.
         """
 
         self.tempF = self.read_temp_c() * 9.0 / 5.0 + 32.0
         return self.tempF
         
     def set_conversion_rate(self, rate):
-        """
+        """!
         Set the conversion rate (0-3)
+
+        @ param int rate: The rate to set the conversion to.
         0 - 0.25 Hz
         1 - 1 Hz
 	    2 - 4 Hz (default)
@@ -166,7 +171,7 @@ class QwiicTmp102Sensor(object):
         self._i2c.writeBlock(self.address, CONFIG_REGISTER, configByte)
         
     def set_extended_mode(self, mode):
-        """
+        """!
         Enable or disable extended mode
         0 - disabled (-55C to +128C)
         1 - enabled  (-55C to +150C)
@@ -180,7 +185,7 @@ class QwiicTmp102Sensor(object):
         self._i2c.writeBlock(self.address, CONFIG_REGISTER, configByte)
     
     def sleep(self):
-        """
+        """!
         Switch sensor to low power mode
         """
         sleepValue = self.read_block_pointer_reg(CONFIG_REGISTER)[0]
@@ -188,7 +193,7 @@ class QwiicTmp102Sensor(object):
         self._i2c.writeByte(self.address, CONFIG_REGISTER, sleepValue)
 
     def wakeup(self):
-        """
+        """!
         Wakeup and start running in normal power mode
         """
         wakeValue = self.read_block_pointer_reg(CONFIG_REGISTER)[0]
@@ -196,7 +201,7 @@ class QwiicTmp102Sensor(object):
         self._i2c.writeByte(self.address, CONFIG_REGISTER, wakeValue)
 
     def set_alert_polarity(self, polarity):
-        """
+        """!
         Set the polarity of Alert
         0 - Active LOW
         1 - Active HIGH
@@ -210,16 +215,22 @@ class QwiicTmp102Sensor(object):
         self._i2c.writeByte(self.address, CONFIG_REGISTER, configByte)
 
     def alert(self):
-        """
+        """!
         Returns state of Alert register
+
+        @return **int** The state of the alert register.
         """
         alert = self.read_block_pointer_reg(CONFIG_REGISTER)[1]
         alert &= 0x20   #Clear everything but the alert bit (bit 5)
         return alert>>5
         
     def one_shot(self, setOneShot = 0):
-        """
+        """!
         Sets the SingleShot Register. Returns 1 after the conversion is complete
+
+        @param int setOneShot: 0 - Continuous conversion (default)
+
+        @return **int** The state of the one shot register.
         """
         registerByte = self.read_block_pointer_reg(CONFIG_REGISTER)[0]
         if(setOneShot == 1):
@@ -232,8 +243,10 @@ class QwiicTmp102Sensor(object):
 
 
     def set_low_temp_c(self, temperature):
-        """
+        """!
         Sets T_LOW (degrees C) alert threshold
+
+        @param float temperature: The temperature in Celsius to set the alert threshold to.
         """
         if(temperature > 150.0):
                 temperature = 150.0
@@ -261,7 +274,7 @@ class QwiicTmp102Sensor(object):
         self._i2c.writeBlock(self.address, T_LOW_REGISTER, registerByte)
 
     def set_high_temp_c(self, temperature):
-        """
+        """!
         Sets T_LOW (degrees C) alert threshold
         """
 
@@ -290,15 +303,17 @@ class QwiicTmp102Sensor(object):
         self._i2c.writeBlock(self.address, T_HIGH_REGISTER, registerByte)
 
     def set_low_temp_f(self, temperature):
-        """
+        """!
         Sets T_LOW (degrees F) alert threshold
+
+        @param float temperature: The temperature in Fahrenheit to set the alert threshold to.
         """
         new_temp = (temperature - 32)*5/9    # Convert temperature to C
         self.set_low_temp_c(new_temp)           # Set T_LOW
 
         
     def set_high_temp_f(self, temperature):
-        """
+        """!
         Sets T_HIGH (degrees F) alert threshold
         """
         new_temp = (temperature - 32)*5/9    # Convert temperature to C
@@ -306,8 +321,10 @@ class QwiicTmp102Sensor(object):
 
 
     def read_low_temp_c(self):
-        """
+        """!
         Gets T_LOW (degrees C) alert threshold
+
+        @return **float** The low temp in Celsius.
         """
         configByte = self.read_block_pointer_reg(CONFIG_REGISTER)
 
@@ -333,8 +350,10 @@ class QwiicTmp102Sensor(object):
         
                     
     def read_high_temp_c(self):
-        """
+        """!
         Gets T_HIGH (degrees C) alert threshold
+
+        @return **float** The high temp in Celsius.
         """
         configByte = self.read_block_pointer_reg(CONFIG_REGISTER)
 
@@ -360,22 +379,28 @@ class QwiicTmp102Sensor(object):
 
 
     def read_low_temp_f(self):
-        """
+        """!
         Reads T_LOW register in F
+
+        @return **float** The low temp in Fahrenheit.
         """
         return self.read_low_temp_c()*9.0/5.0 + 32.0
         
     def read_high_temp_f(self):
-        """
-        Reads T_HIGH register in F		
+        """!
+        Reads T_HIGH register in F
+
+        @return **float** The high temp in Fahrenheit.
         """
         
         return self.read_high_temp_c()*9.0/5.0 + 32.0
 
 
     def set_fault(self, faultSetting):
-        """
+        """!
         Set the number of consecutive faults
+
+        @param int faultSetting: The number of consecutive faults to trigger an alert.
         0 - 1 fault
         1 - 2 faults
         2 - 4 faults
@@ -392,8 +417,10 @@ class QwiicTmp102Sensor(object):
         self._i2c.writeByte(self.address, CONFIG_REGISTER, configByte)
         
     def set_alert_mode(self, mode):
-        """
-	    Set Alert type
+        """!
+        Set Alert type
+
+        @param int mode: The mode to set the alert to.
         0 - Comparator Mode: Active from temp > T_HIGH until temp < T_LOW
         1 - Thermostat Mode: Active when temp > T_HIGH until any read operation occurs
         """
@@ -406,20 +433,16 @@ class QwiicTmp102Sensor(object):
         self._i2c.writeByte(self.address, CONFIG_REGISTER, configByte)
 
     def read_block_pointer_reg(self, reg, numBytes = 2):
-        """
+        """!
         To read from the device, we first write the register we want to read then explicitly send a stop bit.
         Then, restart the connection to read the data from the device.
 
         See datasheet page. 13
 
-        :param reg: The register to read from.
-        :type reg: int
-        
-        :param numBytes: The number of bytes to read.
-        :type numBytes: int
+        @param int reg: The register to read from.
+        @param int numBytes: The number of bytes to read.
 
-        :return: A list of bytes from the device.
-        :rtype: list
+        @return **list** A list of bytes from the device.
         """
         self._i2c.writeCommand(self.address, reg)
 
