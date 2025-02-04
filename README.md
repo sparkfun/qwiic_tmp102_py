@@ -1,105 +1,125 @@
-Qwiic_TMP102_Py
-===============
+![Qwiic TMP102 - Python Package](docs/images/gh-banner.png "qwiic TMP102 Python Package")
 
-<p align="center">
-   <img src="https://cdn.sparkfun.com/assets/custom_pages/2/7/2/qwiic-logo-registered.jpg"  width=200>  
-   <img src="https://www.python.org/static/community_logos/python-logo-master-v3-TM.png"  width=240>   
-</p>
-<p align="center">
-	<a href="https://pypi.org/project/sparkfun-qwiic-tmp102/" alt="Package">
-		<img src="https://img.shields.io/pypi/pyversions/sparkfun-qwiic_tmp102.svg" /></a>
-	<a href="https://github.com/sparkfun/Qwiic_TMP102_Py/issues" alt="Issues">
-		<img src="https://img.shields.io/github/issues/sparkfun/Qwiic_TMP102_Py.svg" /></a>
-	<a href="https://qwiic-tmp102-py.readthedocs.io/en/latest/?" alt="Documentation">
-		<img src="https://readthedocs.org/projects/qwiic-tmp102-py/badge/?version=latest&style=flat" /></a>
-	<a href="https://github.com/sparkfun/Qwiic_TMP102_Py/blob/master/LICENSE" alt="License">
-		<img src="https://img.shields.io/badge/license-MIT-blue.svg" /></a>
-	<a href="https://twitter.com/intent/follow?screen_name=sparkfun">
-        	<img src="https://img.shields.io/twitter/follow/sparkfun.svg?style=social&logo=twitter"
-           	 alt="follow on Twitter"></a>
+# SparkFun Qwiic TMP102 - Python Package
 
-</p>
+![PyPi Version](https://img.shields.io/pypi/v/sparkfun_qwiic_tmp102)
+![GitHub issues](https://img.shields.io/github/issues/sparkfun/qwiic_tmp102_py)
+![License](https://img.shields.io/github/license/sparkfun/qwiic_tmp102_py)
+![X](https://img.shields.io/twitter/follow/sparkfun)
+[![API](https://img.shields.io/badge/API%20Reference-blue)](https://docs.sparkfun.com/qwiic_tmp102_py/classqwiic__tmp102_1_1_qwiic_tmp102_sensor.html)
 
-<img src="https://cdn.sparkfun.com/assets/parts/1/5/0/0/7/16304-SparkFun_Digital_Temperature_Sensor_-_TMP102__Qwiic_-01.jpg"  align="right" width=300 alt="SparkFun Qwiic TMP102">
+The SparkFun Qwiic Digital Temperature Sensing TMP102 Module provides a simple and cost effective solution for adding Digital Temperature Sensing capabilities to your project. Implementing a SparkFun Qwiic I2C interface, these sensors can be rapidly added to any project with boards that are part of the SparkFun Qwiic ecosystem.
 
+This repository implements a Python package for the SparkFun Qwiic TMP102. This package works with Python, MicroPython and CircuitPython.
 
-Python module for the [SparkFun Qwiic TMP102 Sensor](https://www.sparkfun.com/products/16304)
+### Contents
 
-This python package is a port of the existing [SparkFun TMP102 Arduino Examples](https://github.com/sparkfun/SparkFun_TMP102_Arduino_Library/tree/master/examples)
+* [About](#about-the-package)
+* [Getting Started](#getting-started)
+* [Installation](#installation)
+* [Supported Platforms](#supported-platforms)
+* [Documentation](https://docs.sparkfun.com/qwiic_tmp102_py/classqwiic__tmp102_1_1_qwiic_tmp102_sensor.html)
+* [Examples](#examples)
 
-This package can be used in conjunction with the overall [SparkFun qwiic Python Package](https://github.com/sparkfun/Qwiic_Py)
+## About the Package
+
+This python package enables the user to access the features of the TMP102 via a single Qwiic cable. This includes <reading temperature, setting alerts> and more. The capabilities of the TMP102 are each demonstrated in the included examples.
 
 New to qwiic? Take a look at the entire [SparkFun qwiic ecosystem](https://www.sparkfun.com/qwiic).
 
-## Contents
+### Supported SparkFun Products
 
-* [Supported Platforms](#supported-platforms)
-* [Dependencies](#dependencies)
-* [Installation](#installation)
-* [Documentation](#documentation)
-* [Example Use](#example-use)
+This Python package supports the following SparkFun qwiic products on Python, MicroPython and Circuit python. 
 
-Supported Platforms
---------------------
-The qwiic TMP102 Python package current supports the following platforms:
-* [Raspberry Pi](https://www.sparkfun.com/search/results?term=raspberry+pi)
-* [NVidia Jetson Nano](https://www.sparkfun.com/products/15297)
-* [Google Coral Development Board](https://www.sparkfun.com/products/15318)
+* [SparkFun Digital Temperature Sensing Sensor - TMP102](https://www.sparkfun.com/products/16304)
 
-Dependencies
---------------
-This driver package depends on the qwiic I2C driver:
-[Qwiic_I2C_Py](https://github.com/sparkfun/Qwiic_I2C_Py)
+### Supported Platforms
 
-Documentation
--------------
-The SparkFun qwiic TMP102 module documentation is hosted at [ReadTheDocs](https://qwiic-tmp102-py.readthedocs.io/en/latest/?)
+| Python | Platform | Boards |
+|--|--|--|
+| Python | Linux | [Raspberry Pi](https://www.sparkfun.com/raspberry-pi-5-8gb.html) , [NVIDIA Jetson Orin Nano](https://www.sparkfun.com/nvidia-jetson-orin-nano-developer-kit.html) via the [SparkFun Qwiic SHIM](https://www.sparkfun.com/sparkfun-qwiic-shim-for-raspberry-pi.html) |
+| MicroPython | Raspberry Pi - RP2, ESP32 | [SparkFun RP2040 Thing+](https://www.sparkfun.com/sparkfun-thing-plus-rp2040.html), [SparkFun RP2350 Thing+](https://www.sparkfun.com/sparkfun-thing-plus-rp2350.html), [SparkFun ESP32 Thing+](https://www.sparkfun.com/sparkfun-thing-plus-esp32-wroom-usb-c.html)
+|CircuitPython | Raspberry Pi - RP2, ESP32 | [SparkFun RP2040 Thing+](https://www.sparkfun.com/sparkfun-thing-plus-rp2040.html), [SparkFun RP2350 Thing+](https://www.sparkfun.com/sparkfun-thing-plus-rp2350.html), [SparkFun ESP32 Thing+](https://www.sparkfun.com/sparkfun-thing-plus-esp32-wroom-usb-c.html)
 
-Installation
----------------
-### PyPi Installation
+> [!NOTE]
+> The listed supported platforms and boards are the primary platform targets tested. It is fully expected that this package will work across a wide variety of Python enabled systems. 
 
-This repository is hosted on PyPi as the [sparkfun-qwiic-tmp102](https://pypi.org/project/sparkfun-qwiic-tmp102/) package. On systems that support PyPi installation via pip, this library is installed using the following commands
+## Installation 
 
-For all users (note: the user must have sudo privileges):
+The first step to using this package is installing it on your system. The install method depends on the python platform. The following sections outline installation on Python, MicroPython and CircuitPython.
+
+### Python 
+
+#### PyPi Installation
+
+The package is primarily installed using the `pip3` command, downloading the package from the Python Index - "PyPi". 
+
+Note - the below instructions outline installation on a Linux-based (Raspberry Pi) system.
+
+First, setup a virtual environment from a specific directory using venv:
 ```sh
-sudo pip install sparkfun-qwiic-tmp102
+python3 -m venv path/to/venv
 ```
-For the current user:
+You can pass any path as path/to/venv, just make sure you use the same one for all future steps. For more information on venv [click here](https://docs.python.org/3/library/venv.html).
 
+Next, install the qwiic package with:
 ```sh
-pip install sparkfun-qwiic-tmp102
+path/to/venv/bin/pip3 install sparkfun-qwiic-tmp102
 ```
-To install, make sure the setuptools package is installed on the system.
-
-Direct installation at the command line:
+Now you should be able to run any example or custom python scripts that have `import qwiic_tmp102` by running e.g.:
 ```sh
-python setup.py install
+path/to/venv/bin/python3 example_script.py
 ```
 
-To build a package for use with pip:
+### MicroPython Installation
+If not already installed, follow the [instructions here](https://docs.micropython.org/en/latest/reference/mpremote.html) to install mpremote on your computer.
+
+Connect a device with MicroPython installed to your computer and then install the package directly to your device with mpremote mip.
 ```sh
-python setup.py sdist
- ```
-A package file is built and placed in a subdirectory called dist. This package file can be installed using pip.
+mpremote mip install github:sparkfun/qwiic_tmp102_py
+```
+
+If you would also like to install the examples for this repository, issue the following mip command as well:
 ```sh
-cd dist
-pip install sparkfun-qwiic-tmp102-<version>.tar.gz
+mprmeote mip install github:sparkfun/qwiic_tmp102_py@examples
+```
+
+### CircuitPython Installation
+If not already installed, follow the [instructions here](https://docs.circuitpython.org/projects/circup/en/latest/#installation) to install CircUp on your computer.
+
+Ensure that you have the latest version of the SparkFun Qwiic CircuitPython bundle. 
+```sh
+circup bundle-add sparkfun/Qwiic_Py
+```
+
+Finally, connect a device with CircuitPython installed to your computer and then install the package directly to your device with circup.
+```sh
+circup install --py qwiic_tmp102
+```
+
+If you would like to install any of the examples from this repository, issue the corresponding circup command from below. (NOTE: The below syntax assumes you are using CircUp on Windows. Linux and Mac will have different path seperators (i.e. "/" vs. "\"). See the [CircUp "example" command documentation](https://learn.adafruit.com/keep-your-circuitpython-libraries-on-devices-up-to-date-with-circup/example-command) for more information)
+
+```sh
+circup example qwiic_tmp102\Example1-GetTemperature
+circup example qwiic_tmp102\Example2_One-Shot_Temperature_Reading
+
 ```
 
 Example Use
- -------------
-See the examples directory for more detailed use examples.
+ ---------------
+Below is a quickstart program to print readings from the TMP102.
+
+See the examples directory for more detailed use examples and [examples/README.md](https://github.com/sparkfun/qwiic_tmp102_py/blob/main/examples/README.md) for a summary of the available examples.
 
 ```python
-from __future__ import print_function
+
 import qwiic_tmp102
 import time
 import sys
 
 def runExample():
 
-	print("\nSparkFun Qwiic TMP102 Sensor Test Example\n")
+	print("\nSparkFun Qwiic TMP102 Sensor Example 1\n")
 	myTmpSensor = qwiic_tmp102.QwiicTmp102Sensor()
 
 	if myTmpSensor.is_connected == False:
@@ -111,10 +131,34 @@ def runExample():
 
 	print("Initialized.")
 
+  
+	myTmpSensor.set_fault(0)
+  
+	myTmpSensor.set_alert_polarity(1)	# Active HIGH
+  
+	myTmpSensor.set_alert_mode(0)	# Comparator Mode.
+  
+	myTmpSensor.set_conversion_rate(2)
+  
+	myTmpSensor.set_extended_mode(0)
+
+	myTmpSensor.set_high_temp_f(85.0)  # set T_HIGH in F
+  
+	myTmpSensor.set_low_temp_f(84.0)	# set T_LOW in F
+		
 	while True:
-		print ("Temp in F: ", myTmpSensor.read_temp_f())
-		print ("Temp in C: ", myTmpSensor.read_temp_c())
-		print ("--------------------------------------------")
+		myTmpSensor.wakeup()
+		
+		temperature = myTmpSensor.read_temp_f()
+		
+		alertRegisterState = myTmpSensor.alert()		# read the Alert from register
+		
+		myTmpSensor.sleep()
+		
+		print("Temperature: ", temperature)
+		print("Alert Register: ", alertRegisterState)
+		time.sleep(2)
+	
 
 if __name__ == '__main__':
 	try:
@@ -122,6 +166,8 @@ if __name__ == '__main__':
 	except (KeyboardInterrupt, SystemExit) as exErr:
 		print("\nEnding Example 1")
 		sys.exit(0)
+
+
 
 ```
 <p align="center">

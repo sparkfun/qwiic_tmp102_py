@@ -4,7 +4,7 @@
 # Example for the TMP102 I2C Temperature Sensor
 # Alex Wende @ SparkFun Electronics
 # April 29th 2016
-
+#
 # This sketch connects to the TMP102 temperature sensor and enables the
 # one-shot temperature measurement mode using the one_shot() function.
 # The function returns 0 until the temperature measurement is ready to
