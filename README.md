@@ -100,8 +100,8 @@ circup install --py qwiic_tmp102
 If you would like to install any of the examples from this repository, issue the corresponding circup command from below. (NOTE: The below syntax assumes you are using CircUp on Windows. Linux and Mac will have different path seperators (i.e. "/" vs. "\"). See the [CircUp "example" command documentation](https://learn.adafruit.com/keep-your-circuitpython-libraries-on-devices-up-to-date-with-circup/example-command) for more information)
 
 ```sh
-circup example qwiic_tmp102\Example1-GetTemperature
-circup example qwiic_tmp102\Example2_One-Shot_Temperature_Reading
+circup example qwiic_tmp102\Example1_GetTemperature
+circup example qwiic_tmp102\Example2_One_Shot_Temperature_Reading
 
 ```
 
