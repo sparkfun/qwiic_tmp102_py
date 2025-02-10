@@ -1,9 +1,7 @@
 {
     "urls": [
-      ["qwiic_tmp102.py", "github:sparkfun/Qwiic_TMP102_Py/qwiic_tmp102.py"]
-    ],
-    "deps": [
-      ["github:sparkfun/Qwiic_I2C_Py", "master"]
+      ["qwiic_tmp102_py_examples/Example1-GetTemperature.py", "github:sparkfun/qwiic_tmp102_py/examples/Example1-GetTemperature.py"],
+      ["qwiic_tmp102_py_examples/Example2_One-Shot_Temperature_Reading.py", "github:sparkfun/qwiic_tmp102_py/examples/Example2_One-Shot_Temperature_Reading.py"]
     ],
     "version": "0.0.4"
 }
