@@ -3,7 +3,7 @@ requires = ["setuptools"]
 
 [project]
 name = "sparkfun_qwiic_tmp102"
-version = "0.0.4"
+version = "2.0.0"
 description = "Sparkfun Electronics Qwiic TMP102 Package"
 readme = "DESCRIPTION.rst"
 
